@@ -82,7 +82,8 @@ function meta_iterator(app, parent, value, key)
 {
   if ( value.meta )
   {
-    if ( value.meta.zones )
+    if ( value.meta.zones
+         && (value.meta.enableNotifications == null || value.meta.enableNotifications == true))
     {
       var path = parent + "." + key
 
@@ -181,7 +182,11 @@ function createAlarm(app, path, zone, value)
   
   var message
   if ( zone )
+  {
     message = zone.message
+    if ( message.indexOf('%d') )
+      message = utils.format(message, value)
+  }
 
   if ( typeof message === 'undefined' )
     message = path + " is " + value
